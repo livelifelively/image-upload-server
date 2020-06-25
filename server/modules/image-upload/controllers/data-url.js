@@ -1,6 +1,7 @@
 const uuid = require('uuid')
 const mime = require('mime-types')
 const AWS = require('aws-sdk')
+const logger = require('../../../services/logger')
 
 const BUCKET_NAME = process.env.AWS_S3_BUCKET_NAME
 const client = new AWS.S3()
@@ -14,20 +15,18 @@ module.exports = (dataUrl, uploadKeyPrefix) => {
   }, uploadKeyPrefix
   )
 
-  // logger.verbose({ message: 'Uploading dataUrl to S3', params })
+  logger.verbose({ message: 'Uploading dataUrl to S3', params })
 
   return client
     .putObject(params)
     .promise()
     .then(() => {
       const data = { url: getUploadedUrl(params) }
-      // logger.verbose({ message: 'Successfully uploaded to S3', data })
+      logger.verbose({ message: 'Successfully uploaded to S3', data })
       return data
     })
     .catch(error => {
-      console.log(error)
-      // logger.error({ message: 'Error from S3', data: error.message })
-      // throw new UploadError(error)
+      logger.error({ message: 'Error from S3', data: error.message })
     })
 }
 

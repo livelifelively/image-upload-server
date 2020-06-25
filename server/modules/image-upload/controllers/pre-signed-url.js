@@ -4,8 +4,15 @@ const AWS = require('aws-sdk')
 
 const BUCKET_NAME = process.env.AWS_S3_BUCKET_NAME
 const client = new AWS.S3()
-// const logger = require('server/services/logger')
+const logger = require('../../../services/logger')
 
+/**
+ * Presigned Url
+ * @param {String} fileType
+ * @param {String} hostname
+ * @param {String} uploadKeyPrefix
+ * @returns {Object} presignedUrl
+ */
 module.exports = async (fileType, hostname, uploadKeyPrefix) => {
   uploadKeyPrefix = uploadKeyPrefix ? uploadKeyPrefix : ''
   const params = {
@@ -23,15 +30,13 @@ module.exports = async (fileType, hostname, uploadKeyPrefix) => {
 
   try {
     const preSignedUrl = client.createPresignedPost(params)
-    console.log({ message: 'Fetched pre-signed upload url from S3', url: { params: params, preSignedUrl } })
-    // logger.verbose({ message: 'Fetched pre-signed upload url from S3', url: { params: params, preSignedUrl } })
+    logger.verbose({ message: 'SUCCESS Fetched pre-signed upload url from S3', url: { params: params, preSignedUrl } })
     return preSignedUrl
   } catch (err) {
-    console.log("ERROR HERE - PRESIGNED URL")
-    // logger.verbose({
-    //   message: 'Fetching pre-signed upload url from S3 FAILED',
-    //   err
-    // })
+    logger.verbose({
+      message: 'FAILED Fetching pre-signed upload url from S3',
+      err
+    })
   }
 }
 

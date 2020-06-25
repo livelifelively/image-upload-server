@@ -1,5 +1,8 @@
 const aws = require('aws-sdk')
 
+/**
+ * Configuration for connection to AWS
+ */
 module.exports = () => {
   aws.config = new aws.Config({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,

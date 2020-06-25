@@ -1,6 +1,7 @@
 const _ = require('lodash')
 const Boom = require('@hapi/boom')
 
+// handle error, highlight and structure error
 function handleError (err, ctx) {
   highlightAndLogError(err)
 
@@ -17,6 +18,7 @@ function handleError (err, ctx) {
   ctx.send(errorCode, errorOutput)
 }
 
+// Highlight, to make it visually identifiable
 function highlightAndLogError (err, req, res, next) {
   console.log('=============================================================')
   console.log('||                    SYSTEM ERROR !!!!                    ||')
@@ -26,6 +28,7 @@ function highlightAndLogError (err, req, res, next) {
   console.log('=============================================================')
 }
 
+// Structure error to make it more readable
 function boomifyErrorResponse (e) {
   if (e.response && e.response.data && e.response.data.error) {
     const firebaseError = e.response.data.error
@@ -45,6 +48,7 @@ function boomifyErrorResponse (e) {
   return Boom.boomify(e)
 }
 
+// Error handler
 module.exports = () => {
   return async function ErrorHandler (ctx, next) {
     try {

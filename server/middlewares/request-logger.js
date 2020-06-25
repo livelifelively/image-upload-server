@@ -1,5 +1,6 @@
 const logger = require('../services/logger')
 
+// log request details
 module.exports = () => {
   return async function requestLogger (ctx, next) {
     logger.info({
